@@ -1,113 +1,138 @@
-import Image from 'next/image'
+'use client';
+import { Lobster, Roboto } from 'next/font/google';
+import { useEffect, useState } from 'react';
+import {
+  LONG_BREAK,
+  POMODORO,
+  SHORT_BREAK,
+} from '@/domain/pomodoro/pomodoro-mode';
+import { usePomodoroStore } from '@/domain/pomodoro/pomodoro-store';
+import PomodoroButton from '@/components/pomodoro-button';
+const lobster = Lobster({ weight: '400', subsets: ['latin'] });
+const roboto = Roboto({ weight: '500', subsets: ['latin'] });
 
 export default function Home() {
+  const { mode, setMode, transition } = usePomodoroStore();
+  const [time, setTime] = useState(mode.duration);
+  const [isRunning, setIsRunning] = useState(false);
+  const [timerInterval, setTimerInterval] = useState<NodeJS.Timer>(null);
+
+  const startTimer = () => {
+    setIsRunning(true);
+  };
+
+  useEffect(() => {
+    if (isRunning) {
+      const timerIntervalId = setInterval(() => {
+        // Calculate minutes and seconds
+        if (time > 0) {
+          const currentTime = time - 1;
+          const minutes = Math.floor(currentTime / 60);
+          const seconds = currentTime % 60;
+
+          // Display the time in the format MM:SS
+          document.title = `${String(minutes).padStart(2, '0')}:${String(
+            seconds
+          ).padStart(2, '0')} ${mode.title}`;
+
+          // Update the state to trigger a re-render
+          setTime((prevTime) => prevTime - 1);
+          // Check if the timer has reached 0
+        }
+        if (time <= 0) {
+          clearInterval(timerInterval);
+          transition();
+          setIsRunning(false); // Reset the isRunning state
+        }
+      }, 1000);
+
+      setTimerInterval(timerIntervalId);
+    }
+    // Cleanup the interval when the component unmounts or when the timer is stopped
+    clearInterval(timerInterval);
+  }, [time, isRunning]);
+
+  useEffect(() => {
+    if (isRunning) {
+      pauseTimer();
+    }
+    setTime(mode.duration);
+  }, [mode]);
+
+  const pauseTimer = () => {
+    clearInterval(timerInterval);
+    setIsRunning(false);
+  };
+
+  const getButtonTitle = () => (isRunning ? 'STOP' : 'START');
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div
+      className={`h-screen bg-white ${
+        mode === POMODORO ? 'background-pomodoro' : ''
+      } ${mode === SHORT_BREAK ? 'background-short-break' : ''} ${
+        mode === LONG_BREAK ? 'background-long-break' : ''
+      } `}
+    >
+      <div className={'h-20 flex p-6 w-screen'}>
+        <div
+          className={`${lobster.className} text-4xl 
+          ${mode.type == 'pomodoro' ? 'text-pomodoro-primary' : ''}
+          ${mode.type == 'short-break' ? 'text-short_break-primary' : ''}
+          ${mode.type == 'long-break' ? 'text-long_break-primary' : ''} `}
+        >
+          Passata 🥫
+        </div>
+        <div className={'ml-auto'}>
+          <PomodoroButton label="Reset" />
         </div>
       </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className={'flex justify-center'}>
+        <div className={'mt-20 flex flex-col'}>
+          <div
+            className={`flex justify-center rounded-md 
+             ${mode.type == 'pomodoro' ? 'bg-pomodoro-secondary' : ''}
+             ${mode.type == 'short-break' ? 'bg-short_break-secondary' : ''}
+          ${
+            mode.type == 'long-break' ? 'bg-long_break-secondary' : ''
+          } px-24 py-8`}
+          >
+            <div className={'flex flex-col'}>
+              <div className={'text-[10rem] text-white'}>
+                <p className={roboto.className}>{`${String(
+                  Math.floor(time / 60)
+                ).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`}</p>
+              </div>
+              <div className={'flex justify-center'}>
+                <PomodoroButton
+                  onClick={() => {
+                    isRunning ? pauseTimer() : startTimer();
+                  }}
+                  label={getButtonTitle()}
+                  className={`${roboto.className} w-40 py-3 px-6 text-xl`}
+                />
+              </div>
+            </div>
+          </div>
+          <div className={'mt-3'}>
+            <div className={'flex justify-center space-x-4 w-full'}>
+              <PomodoroButton
+                onClick={() => setMode(POMODORO)}
+                label="Pomodoro"
+              />
+              <PomodoroButton
+                onClick={() => setMode(SHORT_BREAK)}
+                label="Short Break"
+              />
+              <PomodoroButton
+                onClick={() => setMode(LONG_BREAK)}
+                label="Long Break"
+              />
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    </div>
+  );
 }

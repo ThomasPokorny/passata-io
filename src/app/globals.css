@@ -2,26 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.background-pomodoro {
+  background-image: linear-gradient(135deg, rgb(237, 136, 124) 0%, rgb(143, 49, 37) 100%);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.background-short-break {
+  background-image: linear-gradient(135deg, rgb(159, 171, 255) 0%, rgb(80, 59, 240) 100%);
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.background-long-break {
+  background-image: linear-gradient(135deg, rgb(64, 193, 188) 0%, rgb(27, 105, 106) 100%);
+}
+
+.button-pomodoro {
+  background-color:  #cd4535;
+}
+
+.button-pomodoro:hover {
+  background-color: #b63a2b;
+}
+
+.button-short-break {
+  background-color: #605afa;
+}
+
+.button-short-break:hover {
+  background-color: #503bf0;
+}
+
+.button-long-break {
+  background-color: #2bb6b3;
+}
+
+.button-long-break:hover {
+  background-color: #1d8484;
 }
