@@ -101,8 +101,8 @@ export default function Home() {
         mode === LONG_BREAK ? 'background-long-break' : ''
       } `}
     >
-      <div className={'h-20 flex p-6 w-screen'}>
-        <div className={`${lobster.className} text-4xl text-white `}>
+      <div className={'h-20 flex items-center px-14 w-screen'}>
+        <div className={`${lobster.className} text-4xl text-gray-600 `}>
           Passata 🥫
         </div>
         <div className={'ml-auto'}>
@@ -119,17 +119,12 @@ export default function Home() {
       </div>
 
       <div className={'flex justify-center'}>
-        <div className={'mt-20 flex flex-col'}>
+        <div className={'mt-16 flex flex-col'}>
           <div
-            className={`flex justify-center rounded-md 
-             ${mode.type == 'pomodoro' ? 'bg-pomodoro-secondary' : ''}
-             ${mode.type == 'short-break' ? 'bg-short_break-secondary' : ''}
-          ${
-            mode.type == 'long-break' ? 'bg-long_break-secondary' : ''
-          } px-24 py-8`}
+            className={`flex justify-center rounded-lg bg-gray-200 px-24 py-8`}
           >
             <div className={'flex flex-col'}>
-              <div className={'text-[10rem] text-white'}>
+              <div className={'text-[10rem] text-gray-400'}>
                 <p className={roboto.className}>{`${String(
                   Math.floor(time / 60)
                 ).padStart(2, '0')}:${String(time % 60).padStart(2, '0')}`}</p>
@@ -150,7 +145,7 @@ export default function Home() {
                   <div className="absolute ml-[25rem] mt-[0.5rem] cursor-pointer">
                     <ForwardIcon
                       onClick={() => transition(true)}
-                      className="w-8 h-8 text-white"
+                      className="w-8 h-8 text-gray-400"
                     />
                   </div>
                 ) : (

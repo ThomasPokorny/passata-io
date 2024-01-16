@@ -2,17 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.background-pomodoro {
-  background-image: linear-gradient(135deg, rgb(237, 136, 124) 0%, rgb(143, 49, 37) 100%);
-}
-
-.background-short-break {
-  background-image: linear-gradient(135deg, rgb(159, 171, 255) 0%, rgb(80, 59, 240) 100%);
-}
-
-.background-long-break {
-  background-image: linear-gradient(135deg, rgb(64, 193, 188) 0%, rgb(27, 105, 106) 100%);
-}
 
 .button-pomodoro {
   background-color:  #cd4535;
@@ -20,10 +9,6 @@
 
 .button-pomodoro:hover {
   background-color: #b63a2b;
-}
-
-.button-pomodoro-play:active {
-  transform: scale(0.95);
 }
 
 .button-short-break {
@@ -40,4 +25,8 @@
 
 .button-long-break:hover {
   background-color: #1d8484;
+}
+
+.button-pomodoro-play:active {
+  transform: scale(0.95);
 }
