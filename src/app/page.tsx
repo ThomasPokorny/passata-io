@@ -10,6 +10,7 @@ import { usePomodoroStore } from '@/domain/pomodoro/pomodoro-store';
 import PomodoroButton from '@/components/pomodoro-button';
 import { PauseIcon, PlayIcon } from '@heroicons/react/16/solid';
 import { clearInterval, setInterval } from 'worker-timers';
+import { playButtonClick } from '@/platform/audio-service';
 
 const lobster = Lobster({ weight: '400', subsets: ['latin'] });
 const roboto = Roboto({ weight: '500', subsets: ['latin'] });
@@ -121,7 +122,7 @@ export default function Home() {
               <div className={'flex justify-center'}>
                 <PomodoroButton
                   onClick={() => {
-                    audioRef.current.play();
+                    playButtonClick();
                     isRunning ? pauseTimer() : startTimer();
                   }}
                   className={`button-pomodoro-play ${roboto.className} w-40 py-3 px-6 text-xl ${isRunning}`}
