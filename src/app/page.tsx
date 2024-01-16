@@ -8,7 +8,11 @@ import {
 } from '@/domain/pomodoro/pomodoro-mode';
 import { usePomodoroStore } from '@/domain/pomodoro/pomodoro-store';
 import PomodoroButton from '@/components/pomodoro-button';
-import { PauseIcon, PlayIcon } from '@heroicons/react/16/solid';
+import {
+  PauseIcon,
+  ArrowUturnLeftIcon,
+  ForwardIcon,
+} from '@heroicons/react/16/solid';
 import { clearInterval, setInterval } from 'worker-timers';
 import { playButtonClick } from '@/platform/audio-service';
 
@@ -16,19 +20,13 @@ const lobster = Lobster({ weight: '400', subsets: ['latin'] });
 const roboto = Roboto({ weight: '500', subsets: ['latin'] });
 
 export default function Home() {
-  const { mode, setMode, transition } = usePomodoroStore();
+  const { mode, setMode, transition, reset } = usePomodoroStore();
   const [time, setTime] = useState(mode.duration);
   const [isRunning, setIsRunning] = useState(false);
   const [timerInterval, setTimerInterval] = useState<number>(null);
 
   const startTimer = () => {
     setIsRunning(true);
-  };
-
-  const clearIntervalTimer = () => {
-    if (timerInterval !== null) {
-      clearInterval(timerInterval);
-    }
   };
 
   useEffect(() => {
@@ -71,7 +69,9 @@ export default function Home() {
   }, [mode]);
 
   const pauseTimer = () => {
-    clearInterval(timerInterval);
+    if (timerInterval != null) {
+      clearInterval(timerInterval);
+    }
     setTimerInterval(null);
     setIsRunning(false);
   };
@@ -80,6 +80,13 @@ export default function Home() {
 
   const getButtonIcon = () =>
     isRunning ? <PauseIcon className="w-5 h-5 mr-2" /> : <></>;
+
+  const resetTimer = () => {
+    playButtonClick();
+    pauseTimer();
+    reset();
+    setTime(mode.duration);
+  };
 
   return (
     <div
@@ -99,7 +106,15 @@ export default function Home() {
           Passata 🥫
         </div>
         <div className={'ml-auto'}>
-          <PomodoroButton>Reset</PomodoroButton>
+          <PomodoroButton
+            className={'button-pomodoro-play'}
+            onClick={resetTimer}
+          >
+            <div className={'flex justify-center items-center'}>
+              <ArrowUturnLeftIcon className="w-5 h-5 mr-2" />
+              Reset
+            </div>
+          </PomodoroButton>
         </div>
       </div>
 
@@ -131,6 +146,16 @@ export default function Home() {
                     {getButtonIcon()} {getButtonTitle()}
                   </div>
                 </PomodoroButton>
+                {isRunning ? (
+                  <div className="absolute ml-[25rem] mt-[0.5rem] cursor-pointer">
+                    <ForwardIcon
+                      onClick={() => transition(true)}
+                      className="w-8 h-8 text-white"
+                    />
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>
