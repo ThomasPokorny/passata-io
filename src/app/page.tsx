@@ -12,6 +12,7 @@ import {
   PauseIcon,
   ArrowUturnLeftIcon,
   ForwardIcon,
+  PlayCircleIcon,
 } from '@heroicons/react/16/solid';
 import { clearInterval, setInterval } from 'worker-timers';
 import { playButtonClick } from '@/platform/audio-service';
@@ -79,7 +80,11 @@ export default function Home() {
   const getButtonTitle = () => (isRunning ? 'STOP' : 'START');
 
   const getButtonIcon = () =>
-    isRunning ? <PauseIcon className="w-5 h-5 mr-2" /> : <></>;
+    isRunning ? (
+      <PauseIcon className="w-5 h-5 mr-2" />
+    ) : (
+      <PlayCircleIcon className="w-5 h-5 mr-2" />
+    );
 
   const resetTimer = () => {
     playButtonClick();
@@ -97,12 +102,7 @@ export default function Home() {
       } `}
     >
       <div className={'h-20 flex p-6 w-screen'}>
-        <div
-          className={`${lobster.className} text-4xl 
-          ${mode.type == 'pomodoro' ? 'text-pomodoro-primary' : ''}
-          ${mode.type == 'short-break' ? 'text-short_break-primary' : ''}
-          ${mode.type == 'long-break' ? 'text-long_break-primary' : ''} `}
-        >
+        <div className={`${lobster.className} text-4xl text-white `}>
           Passata 🥫
         </div>
         <div className={'ml-auto'}>
