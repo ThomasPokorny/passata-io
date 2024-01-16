@@ -8,6 +8,9 @@ import {
 } from '@/domain/pomodoro/pomodoro-mode';
 import { usePomodoroStore } from '@/domain/pomodoro/pomodoro-store';
 import PomodoroButton from '@/components/pomodoro-button';
+import { PauseIcon, PlayIcon } from '@heroicons/react/16/solid';
+import { clearInterval, setInterval } from 'worker-timers';
+
 const lobster = Lobster({ weight: '400', subsets: ['latin'] });
 const roboto = Roboto({ weight: '500', subsets: ['latin'] });
 
@@ -15,10 +18,16 @@ export default function Home() {
   const { mode, setMode, transition } = usePomodoroStore();
   const [time, setTime] = useState(mode.duration);
   const [isRunning, setIsRunning] = useState(false);
-  const [timerInterval, setTimerInterval] = useState<NodeJS.Timer>(null);
+  const [timerInterval, setTimerInterval] = useState<number>(null);
 
   const startTimer = () => {
     setIsRunning(true);
+  };
+
+  const clearIntervalTimer = () => {
+    if (timerInterval !== null) {
+      clearInterval(timerInterval);
+    }
   };
 
   useEffect(() => {
@@ -40,7 +49,6 @@ export default function Home() {
           // Check if the timer has reached 0
         }
         if (time <= 0) {
-          clearInterval(timerInterval);
           transition();
           setIsRunning(false); // Reset the isRunning state
         }
@@ -48,8 +56,10 @@ export default function Home() {
 
       setTimerInterval(timerIntervalId);
     }
-    // Cleanup the interval when the component unmounts or when the timer is stopped
-    clearInterval(timerInterval);
+
+    if (timerInterval != null) {
+      clearInterval(timerInterval);
+    }
   }, [time, isRunning]);
 
   useEffect(() => {
@@ -61,10 +71,14 @@ export default function Home() {
 
   const pauseTimer = () => {
     clearInterval(timerInterval);
+    setTimerInterval(null);
     setIsRunning(false);
   };
 
   const getButtonTitle = () => (isRunning ? 'STOP' : 'START');
+
+  const getButtonIcon = () =>
+    isRunning ? <PauseIcon className="w-5 h-5 mr-2" /> : <></>;
 
   return (
     <div
@@ -84,7 +98,7 @@ export default function Home() {
           Passata 🥫
         </div>
         <div className={'ml-auto'}>
-          <PomodoroButton label="Reset" />
+          <PomodoroButton>Reset</PomodoroButton>
         </div>
       </div>
 
@@ -107,28 +121,29 @@ export default function Home() {
               <div className={'flex justify-center'}>
                 <PomodoroButton
                   onClick={() => {
+                    audioRef.current.play();
                     isRunning ? pauseTimer() : startTimer();
                   }}
-                  label={getButtonTitle()}
-                  className={`${roboto.className} w-40 py-3 px-6 text-xl`}
-                />
+                  className={`button-pomodoro-play ${roboto.className} w-40 py-3 px-6 text-xl ${isRunning}`}
+                >
+                  <div className={'flex justify-center items-center'}>
+                    {getButtonIcon()} {getButtonTitle()}
+                  </div>
+                </PomodoroButton>
               </div>
             </div>
           </div>
           <div className={'mt-3'}>
             <div className={'flex justify-center space-x-4 w-full'}>
-              <PomodoroButton
-                onClick={() => setMode(POMODORO)}
-                label="Pomodoro"
-              />
-              <PomodoroButton
-                onClick={() => setMode(SHORT_BREAK)}
-                label="Short Break"
-              />
-              <PomodoroButton
-                onClick={() => setMode(LONG_BREAK)}
-                label="Long Break"
-              />
+              <PomodoroButton onClick={() => setMode(POMODORO)}>
+                Pomodoro
+              </PomodoroButton>
+              <PomodoroButton onClick={() => setMode(SHORT_BREAK)}>
+                Short Break{' '}
+              </PomodoroButton>
+              <PomodoroButton onClick={() => setMode(LONG_BREAK)}>
+                Long Break
+              </PomodoroButton>
             </div>
           </div>
         </div>

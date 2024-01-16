@@ -22,6 +22,10 @@
   background-color: #b63a2b;
 }
 
+.button-pomodoro-play:active {
+  transform: scale(0.95);
+}
+
 .button-short-break {
   background-color: #605afa;
 }

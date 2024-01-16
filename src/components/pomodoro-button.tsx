@@ -1,7 +1,8 @@
 import { usePomodoroStore } from '@/domain/pomodoro/pomodoro-store';
+import { JSXElement } from '@babel/types';
 
 export default function PomodoroButton(props: {
-  label: string;
+  children: void;
   onClick?: () => void;
   className?: string;
 }) {
@@ -12,7 +13,7 @@ export default function PomodoroButton(props: {
       onClick={props.onClick}
       className={`${props.className} button-${mode.type} py-3 px-6 rounded-lg text-white`}
     >
-      {props.label}
+      {props.children}
     </button>
   );
 }
