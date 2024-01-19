@@ -14,15 +14,15 @@ module.exports = {
       },
       colors: {
         pomodoro: {
-          primary: '#40140f',
+          primary: '#b63a2b',
           secondary: '#ed887c',
         },
         short_break: {
-          primary: '#1e184e',
+          primary: '#605afa',
           secondary: '#797fff',
         },
         long_break: {
-          primary: '#09282a',
+          primary: '#2bb6b3',
           secondary: '#40c1bc',
         },
       },

@@ -16,6 +16,8 @@ import {
 } from '@heroicons/react/16/solid';
 import { clearInterval, setInterval } from 'worker-timers';
 import { playButtonClick } from '@/platform/audio-service';
+import TaskOverview from '@/components/tasks/task-overview';
+import TaskCreate from '@/components/tasks/task-create';
 
 const lobster = Lobster({ weight: '400', subsets: ['latin'] });
 const roboto = Roboto({ weight: '500', subsets: ['latin'] });
@@ -95,14 +97,14 @@ export default function Home() {
 
   return (
     <div
-      className={`h-screen bg-white ${
+      className={`h-screen bg-gray-100 ${
         mode === POMODORO ? 'background-pomodoro' : ''
       } ${mode === SHORT_BREAK ? 'background-short-break' : ''} ${
         mode === LONG_BREAK ? 'background-long-break' : ''
       } `}
     >
       <div className={'h-20 flex items-center px-14 w-screen'}>
-        <div className={`${lobster.className} text-4xl text-gray-600 `}>
+        <div className={`${lobster.className} text-4xl text-gray-600 neon`}>
           Passata 🥫
         </div>
         <div className={'ml-auto'}>
@@ -118,8 +120,8 @@ export default function Home() {
         </div>
       </div>
 
-      <div className={'flex justify-center'}>
-        <div className={'mt-16 flex flex-col'}>
+      <div className={'flex flex-col items-center'}>
+        <div className={'mt-4 flex flex-col'}>
           <div
             className={`flex justify-center rounded-lg bg-gray-200 px-24 py-8`}
           >
@@ -167,6 +169,12 @@ export default function Home() {
               </PomodoroButton>
             </div>
           </div>
+        </div>
+        <div className="mt-8 min-h-[16rem]">
+          <TaskOverview></TaskOverview>
+        </div>
+        <div className="mt-4">
+          <TaskCreate />
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@ export const usePomodoroStore = create((set) => ({
       playAlarm();
     }
     set((state) => {
-      if (state.mode === SHORT_BREAK) {
+      if (state.mode === SHORT_BREAK || state.mode === LONG_BREAK) {
         return { mode: POMODORO };
       }
       if (state.mode === POMODORO && state.pomodoroCount + 1 < 4) {
