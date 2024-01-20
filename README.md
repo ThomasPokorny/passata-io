@@ -1,34 +1,20 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Passata-IO 🥫
 
-## Getting Started
+Recreation of https://pomofocus.io/.
+(developed as a fun side project)
 
-First, run the development server:
+A productivity web application built with Next.js that follows the Pomodoro Technique. Boost your focus and efficiency by seamlessly cycling between work sessions and breaks. The app notifies you when it's time to switch, keeping you on track. Additionally, you can maintain a list of open tasks for better task management.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Features
+- Pomodoro Timer: Set a 25-minute work session, followed by a 5-minute break and a 15 minute break after four completed pomodoro sessions
+- Task Management: Keep track of your tasks with an easy-to-use task list.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How to Use
+Clone the repository.
+1. Install dependencies with `npm install`.
+2. Run the app using npm run dev.
+Open the app in your browser and start boosting your productivity!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Docker Configuration
+Adapt both the Dockerfile and the docker-compose.yml according to your needs.
+Given the default configuration the app will be mapped to the ports `3344:3000`.
