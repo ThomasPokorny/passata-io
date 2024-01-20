@@ -97,7 +97,7 @@ export default function Home() {
 
   return (
     <div
-      className={`h-screen bg-gray-100 ${
+      className={`h-screen bg-gray-50 ${
         mode === POMODORO ? 'background-pomodoro' : ''
       } ${mode === SHORT_BREAK ? 'background-short-break' : ''} ${
         mode === LONG_BREAK ? 'background-long-break' : ''
