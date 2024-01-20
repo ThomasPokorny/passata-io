@@ -12,7 +12,7 @@ A productivity web application built with Next.js that follows the Pomodoro Tech
 ## How to Use
 Clone the repository.
 1. Install dependencies with `npm install`.
-2. Run the app using npm run dev.
+2. Run the app using `npm run dev`.
 Open the app in your browser and start boosting your productivity!
 
 ## Docker Configuration
